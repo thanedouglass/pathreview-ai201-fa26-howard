@@ -151,6 +151,19 @@ class TestOutputParser:
         # May fall back to plaintext or handle specially
         assert isinstance(result, list)
 
+    def test_reproduce_issue_69_json_array_attribute_error(self):
+        """Reproduce issue #69: output parser crashes with AttributeError on a JSON array.
+
+        Confirmed in local environment:
+        When raw_output contains a top-level JSON array instead of an object,
+        json.loads() produces a Python list. Calling parse_review_output(raw_output)
+        invokes _parse_json_output(data) where data is a list, and data.items() raises
+        AttributeError: 'list' object has no attribute 'items'.
+        """
+        raw_output = json.dumps(["First feedback item", "Second feedback item"])
+        with pytest.raises(AttributeError, match=r"'list' object has no attribute 'items'"):
+            parse_review_output(raw_output)
+
     def test_very_long_plain_text(self):
         """Test parsing very long plain text."""
         raw_output = "This is feedback. " * 500

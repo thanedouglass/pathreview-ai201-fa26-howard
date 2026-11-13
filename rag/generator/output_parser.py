@@ -64,6 +64,9 @@ def _parse_json_output(data: dict) -> list[FeedbackSection]:
     """
     sections = []
 
+    # Reproduction Note (Issue #69):
+    # When `data` is a top-level JSON array (list), calling `.items()` raises:
+    # AttributeError: 'list' object has no attribute 'items'.
     # Handle both single-level and nested structures
     for key, value in data.items():
         if isinstance(value, dict):
