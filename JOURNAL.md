@@ -17,3 +17,17 @@ I selected **Tier 1** (Issue #69, tagged `tier-1`, `good first issue`, `rag`, `b
 **Setup confirmation:** [X] App runs locally at localhost:5173
 
 **Cohort ledger:** [X] Issue added to cohort ledger
+
+## Unit 8 — Reproduction & solution planning
+
+**Reproduction commit link:** [commit f95d38e: test(rag): reproduce issue #69 json array attribute error in output parser](https://github.com/thanedouglass/pathreview-ai201-fa26-howard/commit/f95d38ecb68567b8d5325da89f157bf83f45cdaa)
+
+**Reproduction summary:**
+I reproduced the issue locally by running `pytest tests/unit/test_output_parser.py -k test_json_array_fallback --runxfail` and invoking `parse_review_output()` with a top-level JSON array input (`'["First feedback item", "Second feedback item"]'`). As observed, `parse_review_output()` deserialized the input into a Python `list` and passed it to `_parse_json_output()`, which crashed on line 68 with `AttributeError: 'list' object has no attribute 'items'` when calling `data.items()`.
+
+**PLAN.md link:** [PLAN.md](https://github.com/thanedouglass/pathreview-ai201-fa26-howard/blob/fix/69-json-array-fallback/PLAN.md)
+
+**Walkthrough video (recommended):** [N/A - Walkthrough recorded locally]
+
+**Blockers or open questions:**
+None at this time. The root cause is isolated, the reproduction test passes by catching the expected `AttributeError`, and the sub-tasks for Unit 9 implementation in `rag/generator/output_parser.py` and `tests/unit/test_output_parser.py` are clearly mapped.
